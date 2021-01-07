@@ -86,7 +86,7 @@ set location ""
 set output_msg "EEM load interface list for card 1 now...."
 action_syslog priority info msg $output_msg
 
-if [catch {open "harddisk:/scrtips/interface1.txt" r} $f1 ] {
+if [catch {open "harddisk:/scrtips/interface1.txt" r} f1 ] {
 	error $f1
 }
 set intf_list [split [read $f1]]
