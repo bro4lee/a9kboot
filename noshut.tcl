@@ -31,6 +31,7 @@ action_syslog priority info msg $output_msg
 
 set intf_list {
   Te0/1/0/0
+  Te0/1/0/1
 	Te0/2/0/0
 	Te0/2/0/1
 	Te0/2/0/2
