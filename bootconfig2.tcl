@@ -66,7 +66,7 @@ set location ""
 
 #set output_msg "Sleeping for 180s..."
 #after 180000
-set output_msg "admin shutdown card 0/1 now by EEM..."
+#set output_msg "admin shutdown card 0/1 now by EEM..."
 action_syslog priority info msg $output_msg
 
 #if [catch {cli_write $cli1(fd) "admin hw-module location 0/1 shutdown"} result] {
@@ -84,18 +84,18 @@ set output_msg "delay 5s in EEM...."
 action_syslog priority info msg $output_msg
 after 5000
 
-set output_msg "Now load config to shutdown Te0/0/0/1 in EEM...."
+set output_msg "Now load shutdown Te0/1/0/0 in EEM...."
 action_syslog priority info msg $output_msg
 
 if [catch {cli_exec $cli1(fd) "conf t"} result] {
 error $result $errorInfo
 }
-if [catch {cli_exec $cli1(fd) "load harddisk:config1.txt"} result] {
+if [catch {cli_exec $cli1(fd) "interface te0/1/0/0"} result] {
 error $result $errorInfo
 }
-#if [catch {cli_exec $cli1(fd) "shut"} result] {
-#error $result $errorInfo
-#}
+if [catch {cli_exec $cli1(fd) "shut"} result] {
+error $result $errorInfo
+}
 if [catch {cli_exec $cli1(fd) "commit"} result] {
 error $result $errorInfo
 }
