@@ -108,7 +108,7 @@ error $result $errorInfo
 if [catch {cli_close $cli1(fd) $cli1(tty_id)} result] {
     error $result $errorInfo
 }
-action_syslog priority emergencies msg "End of EEM execution "
+action_syslog priority emergencies msg "..End of EEM execution "
 action_syslog priority info msg $output_msg
 
 
