@@ -99,7 +99,7 @@ if [catch {cli_exec $cli1(fd) "conf t"} result] {
 error $result $errorInfo
 }
 
-foreach intf $intf_list{
+foreach intf $intf_list {
 
    if [catch {cli_exec $cli1(fd) "interface ${intf}" } result] {
    error $result $errorInfo
