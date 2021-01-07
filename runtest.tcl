@@ -111,6 +111,9 @@ foreach intf $intf_list {
 #if [catch {cli_exec $cli1(fd) "shut"} result] {
 #error $result $errorInfo
 #}
+set output_msg "EEM commit the shutdown for card 1 now...."
+action_syslog priority info msg $output_msg
+
 if [catch {cli_exec $cli1(fd) "commit"} result] {
 error $result $errorInfo
 }
