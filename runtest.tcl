@@ -79,19 +79,35 @@ set location ""
 
 
 
-set output_msg "delay 5s in EEM...."
-action_syslog priority info msg $output_msg
-after 5000
+#set output_msg "delay 5s in EEM...."
+#action_syslog priority info msg $output_msg
+#after 5000
 
-set output_msg "EEM load config file to shutdown Te0/1/0/0 now...."
+set output_msg "EEM load interface list for card 1 now...."
 action_syslog priority info msg $output_msg
+
+if [catch {open "harddisk:/scrtips/interface1.txt" r} $f1 ] {
+	error $f1
+}
+set intf_list [split [read $f1]]
+
 
 if [catch {cli_exec $cli1(fd) "conf t"} result] {
 error $result $errorInfo
 }
-if [catch {cli_exec $cli1(fd) "load harddisk:config1.txt"} result] {
-error $result $errorInfo
+
+foreach intf $intf_list {
+	#
+	if [catch {cli_exec $cli1(fd) "interface ${intf}"} result] {
+        error $result $errorInfo
+    }
+    if [catch {cli_exec $cli1(fd) "shut"} result] {
+        error $result $errorInfo
+    }
+
 }
+
+
 #if [catch {cli_exec $cli1(fd) "shut"} result] {
 #error $result $errorInfo
 #}
@@ -100,7 +116,7 @@ error $result $errorInfo
 }
 
 
-
+close $f1
 
 
 #close the cli connection
