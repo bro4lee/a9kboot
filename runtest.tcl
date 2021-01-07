@@ -124,7 +124,7 @@ if [catch {cli_close $cli1(fd) $cli1(tty_id)} result] {
     error $result $errorInfo
 }
 
-set output_msg "..Exiting EEM..."
+set output_msg "Exiting EEM...."
 action_syslog priority info msg $output_msg
-
+ 
 
