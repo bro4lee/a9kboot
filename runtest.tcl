@@ -66,15 +66,15 @@ set location ""
 
 #set output_msg "Sleeping for 180s..."
 #after 180000
-set output_msg "admin shutdown 0/0 offline now by EEM..."
-action_syslog priority info msg $output_msg
+#set output_msg "EEM load config file to shutdown 0/1 port now..."
+#action_syslog priority info msg $output_msg
 
-if [catch {cli_write $cli1(fd) "admin hw-module location 0/0 shutdown"} result] {
-error $result $errorInfo
-}
-cli_read_pattern $cli1(fd) "Shutdown hardware module"
-cli_write $cli1(fd) "yes"
-cli_write $cli1(fd) "\r"
+#if [catch {cli_write $cli1(fd) "admin hw-module location 0/0 shutdown"} result] {
+#error $result $errorInfo
+#}
+#cli_read_pattern $cli1(fd) "Shutdown hardware module"
+#cli_write $cli1(fd) "yes"
+#cli_write $cli1(fd) "\r"
 
 
 
@@ -83,18 +83,18 @@ set output_msg "delay 5s in EEM...."
 action_syslog priority info msg $output_msg
 after 5000
 
-set output_msg "Now shutdown Te0/0/0/0 in EEM...."
+set output_msg "EEM load config file to shutdown Te0/1/0/0 now...."
 action_syslog priority info msg $output_msg
 
 if [catch {cli_exec $cli1(fd) "conf t"} result] {
 error $result $errorInfo
 }
-if [catch {cli_exec $cli1(fd) "interface TenGigE0/0/0/0"} result] {
+if [catch {cli_exec $cli1(fd) "load harddisk:config1.txt"} result] {
 error $result $errorInfo
 }
-if [catch {cli_exec $cli1(fd) "shut"} result] {
-error $result $errorInfo
-}
+#if [catch {cli_exec $cli1(fd) "shut"} result] {
+#error $result $errorInfo
+#}
 if [catch {cli_exec $cli1(fd) "commit"} result] {
 error $result $errorInfo
 }
