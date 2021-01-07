@@ -1,7 +1,7 @@
-::cisco::eem::event_register_syslog pattern "%INFRA-SHELF_MGR-6-CARD_SW_OPERATIONAL : Card: 0/1 software state going to Operational" maxrun_sec 3600
+::cisco::eem::event_register_none
 #
 # *********
-# This script shutdown all listed interfaces in Card 1 of the A9K Chassis
+# This script no shut all the listed interaces
 # *********
 #
 # errorInfo gets set by namespace if any of the auto_path directories do not
@@ -23,15 +23,17 @@ namespace import ::cisco::lib::*
 #
 set errorInfo ""
 #Notify users that we're collecting
-set output_msg "EEM shut-card-1.tcl kicks in"
+set output_msg "EEM noshut.tcl kicks in"
 action_syslog priority info msg $output_msg
 
 #query the event info
 #array set arr_einfo [event_reqinfo]
 
 set intf_list {
-	Te0/1/0/0
-	Te0/1/0/1
+  Te0/1/0/0
+	Te0/2/0/0
+	Te0/2/0/1
+	Te0/2/0/2
 }
 
 if {$_cerrno != 0} {
@@ -88,11 +90,11 @@ action_syslog priority info msg $output_msg
 
 
 
-set output_msg "delay 5s in EEM shut-card-1.tcl ..."
+set output_msg "delay 5s in EEM noshut.tcl ..."
 action_syslog priority info msg $output_msg
 after 5000
 
-set output_msg "Now EEM shut-card-1.tcl shutdown all specified interfaces in card 1 ..."
+set output_msg "Now EEM noshut.tcl no shutdown all specified interfaces ..."
 action_syslog priority info msg $output_msg
 
 if [catch {cli_exec $cli1(fd) "conf t"} result] {
@@ -104,12 +106,14 @@ foreach intf $intf_list{
    if [catch {cli_exec $cli1(fd) "interface ${intf}" } result] {
    error $result $errorInfo
    }
-   if [catch {cli_exec $cli1(fd) "shut"} result] {
+   if [catch {cli_exec $cli1(fd) "no shut"} result] {
    error $result $errorInfo
    }
 
 
 }
+
+
 
 if [catch {cli_exec $cli1(fd) "commit"} result] {
 error $result $errorInfo
@@ -123,7 +127,7 @@ error $result $errorInfo
 if [catch {cli_close $cli1(fd) $cli1(tty_id)} result] {
     error $result $errorInfo
 }
-action_syslog priority emergencies msg "End of EEM shut-card-1.tcl execution "
+action_syslog priority emergencies msg "End of EEM noshut.tcl execution "
 action_syslog priority info msg $output_msg
 
 

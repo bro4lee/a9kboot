@@ -29,6 +29,12 @@ action_syslog priority info msg $output_msg
 #query the event info
 #array set arr_einfo [event_reqinfo]
 
+set intf_list {
+	Te0/2/0/0
+	Te0/2/0/1
+	Te0/2/0/2
+}
+
 if {$_cerrno != 0} {
     set result [format "component=%s; subsys err=%s; posix err=%s;\n%s" \
         $_cerr_sub_num $_cerr_sub_err $_cerr_posix_err $_cerr_str]
@@ -93,18 +99,21 @@ action_syslog priority info msg $output_msg
 if [catch {cli_exec $cli1(fd) "conf t"} result] {
 error $result $errorInfo
 }
-if [catch {cli_exec $cli1(fd) "interface te0/2/0/0"} result] {
-error $result $errorInfo
+
+foreach intf $intf_list{
+
+   if [catch {cli_exec $cli1(fd) "interface ${intf}" } result] {
+   error $result $errorInfo
+   }
+   if [catch {cli_exec $cli1(fd) "shut"} result] {
+   error $result $errorInfo
+   }
+
+
 }
-if [catch {cli_exec $cli1(fd) "shut"} result] {
-error $result $errorInfo
-}
-if [catch {cli_exec $cli1(fd) "interface te0/2/0/1"} result] {
-error $result $errorInfo
-}
-if [catch {cli_exec $cli1(fd) "shut"} result] {
-error $result $errorInfo
-}
+
+
+
 if [catch {cli_exec $cli1(fd) "commit"} result] {
 error $result $errorInfo
 }
