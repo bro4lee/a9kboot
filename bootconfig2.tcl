@@ -1,4 +1,4 @@
-::cisco::eem::event_register_syslog pattern "%INFRA-SHELF_MGR-6-CARD_SW_OPERATIONAL : Card: 0/0 software state going to Operational" maxrun_sec 3600
+::cisco::eem::event_register_syslog pattern "%INFRA-SHELF_MGR-6-CARD_SW_OPERATIONAL : Card: 0/1 software state going to Operational" maxrun_sec 3600
 
 #
 # errorInfo gets set by namespace if any of the auto_path directories do not
@@ -20,7 +20,7 @@ namespace import ::cisco::lib::*
 #
 set errorInfo ""
 #Notify users that we're collecting
-set output_msg "EEM kicks in"
+set output_msg "EEM 2 kicks in"
 action_syslog priority info msg $output_msg
 
 #query the event info
@@ -66,10 +66,10 @@ set location ""
 
 #set output_msg "Sleeping for 180s..."
 #after 180000
-set output_msg "admin shutdown card 0/0 now by EEM..."
+set output_msg "admin shutdown card 0/1 now by EEM..."
 action_syslog priority info msg $output_msg
 
-if [catch {cli_write $cli1(fd) "admin hw-module location 0/0 shutdown"} result] {
+if [catch {cli_write $cli1(fd) "admin hw-module location 0/1 shutdown"} result] {
 error $result $errorInfo
 }
 #cli_read_pattern $cli1(fd) "Take hardware module offline"
@@ -84,13 +84,13 @@ set output_msg "delay 5s in EEM...."
 action_syslog priority info msg $output_msg
 after 5000
 
-set output_msg "Now shutdown Te0/0/0/0 in EEM...."
+set output_msg "Now shutdown Te0/0/0/1 in EEM...."
 action_syslog priority info msg $output_msg
 
 if [catch {cli_exec $cli1(fd) "conf t"} result] {
 error $result $errorInfo
 }
-if [catch {cli_exec $cli1(fd) "interface TenGigE0/0/0/0"} result] {
+if [catch {cli_exec $cli1(fd) "interface TenGigE0/0/0/1"} result] {
 error $result $errorInfo
 }
 if [catch {cli_exec $cli1(fd) "shut"} result] {
@@ -108,7 +108,7 @@ error $result $errorInfo
 if [catch {cli_close $cli1(fd) $cli1(tty_id)} result] {
     error $result $errorInfo
 }
-action_syslog priority emergencies msg "..End of EEM execution "
+action_syslog priority emergencies msg "..End of EEM 2 execution "
 action_syslog priority info msg $output_msg
 
 
